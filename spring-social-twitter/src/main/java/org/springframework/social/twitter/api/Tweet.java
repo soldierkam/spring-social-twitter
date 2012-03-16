@@ -19,100 +19,124 @@ import java.util.Date;
 
 /**
  * Represents a Twitter status update (e.g., a "tweet").
+ *
  * @author Craig Walls
  */
 public class Tweet {
-	private long id;
-	private String text;
-	private Date createdAt;
-	private String fromUser;
-	private String profileImageUrl;
-	private Long toUserId;
-	private long fromUserId;
-	private String languageCode;
-	private String source;
-	
-	public Tweet(long id, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
-		this.id = id;
-		this.text = text;
-		this.createdAt = createdAt;
-		this.fromUser = fromUser;
-		this.profileImageUrl = profileImageUrl;
-		this.toUserId = toUserId;
-		this.fromUserId = fromUserId;
-		this.languageCode = languageCode;
-		this.source = source;		
-	}
+    private long id;
+    private String text;
+    private Date createdAt;
+    private String fromUser;
+    private String profileImageUrl;
+    private Long toUserId;
+    private Long inReplyToStatusId;
+    private long fromUserId;
+    private String languageCode;
+    private String source;
+    private Integer retweetCount;
 
-	public String getText() {
-		return text;
-	}
+    public Tweet(long id, String text, Date createdAt, String fromUser, String profileImageUrl, Long toUserId, long fromUserId, String languageCode, String source) {
+        this.id = id;
+        this.text = text;
+        this.createdAt = createdAt;
+        this.fromUser = fromUser;
+        this.profileImageUrl = profileImageUrl;
+        this.toUserId = toUserId;
+        this.fromUserId = fromUserId;
+        this.languageCode = languageCode;
+        this.source = source;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
-	public String getFromUser() {
-		return fromUser;
-	}
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public void setFromUser(String fromUser) {
-		this.fromUser = fromUser;
-	}
+    public String getFromUser() {
+        return fromUser;
+    }
 
-	public long getId() {
-		return id;
-	}
+    public void setFromUser(String fromUser) {
+        this.fromUser = fromUser;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public String getProfileImageUrl() {
-		return profileImageUrl;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setProfileImageUrl(String profileImageUrl) {
-		this.profileImageUrl = profileImageUrl;
-	}
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
 
-	public Long getToUserId() {
-		return toUserId;
-	}
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 
-	public void setToUserId(Long toUserId) {
-		this.toUserId = toUserId;
-	}
+    public Long getToUserId() {
+        return toUserId;
+    }
 
-	public long getFromUserId() {
-		return fromUserId;
-	}
+    public void setToUserId(Long toUserId) {
+        this.toUserId = toUserId;
+    }
 
-	public void setFromUserId(long fromUserId) {
-		this.fromUserId = fromUserId;
-	}
+    public long getFromUserId() {
+        return fromUserId;
+    }
 
-	public String getLanguageCode() {
-		return languageCode;
-	}
+    public void setInReplyToStatusId(Long inReplyToStatusId) {
+        this.inReplyToStatusId = inReplyToStatusId;
+    }
 
-	public void setLanguageCode(String languageCode) {
-		this.languageCode = languageCode;
-	}
+    public Long getInReplyToStatusId() {
+        return inReplyToStatusId;
+    }
 
-	public String getSource() {
-		return source;
-	}
+    public void setFromUserId(long fromUserId) {
+        this.fromUserId = fromUserId;
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setRetweetCount(Integer retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    /**
+     * The number of times this tweet has been retweeted.
+     * Only available in timeline results.
+     * getRetweetCount() will return null for Tweet objects returned in search results.
+     */
+    public Integer getRetweetCount() {
+        return retweetCount;
+    }
 }

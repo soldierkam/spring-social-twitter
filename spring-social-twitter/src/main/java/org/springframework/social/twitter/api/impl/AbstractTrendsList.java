@@ -15,47 +15,41 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.springframework.social.twitter.api.Trend;
 import org.springframework.social.twitter.api.Trends;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
  * Abstract model class representing a list of trends.
+ *
  * @author Craig Walls
  */
 class AbstractTrendsList {
-	private final List<Trends> list;
+    private final List<Trends> list;
 
-	public AbstractTrendsList(Map<String, List<Trend>> trends, DateFormat dateFormat) {
-		list = new ArrayList<Trends>(trends.size());
-		for(Iterator<Entry<String, List<Trend>>> trendsIt = trends.entrySet().iterator(); trendsIt.hasNext();) {
-			Entry<String, List<Trend>> entry = trendsIt.next();
-			
-			list.add(new Trends(toDate(entry.getKey(), dateFormat), entry.getValue()));
-		}
-		Collections.sort(list, new Comparator<Trends>() {
-			public int compare(Trends t1, Trends t2) {
-				return t1.getTime().getTime() > t2.getTime().getTime() ? -1 : 1;
-			}
-		});
-	}
+    public AbstractTrendsList(Map<String, List<Trend>> trends, DateFormat dateFormat) {
+        list = new ArrayList<Trends>(trends.size());
+        for (Iterator<Entry<String, List<Trend>>> trendsIt = trends.entrySet().iterator(); trendsIt.hasNext(); ) {
+            Entry<String, List<Trend>> entry = trendsIt.next();
 
-	public List<Trends> getList() {
-		return list;
-	}
-	
+            list.add(new Trends(toDate(entry.getKey(), dateFormat), entry.getValue()));
+        }
+        Collections.sort(list, new Comparator<Trends>() {
+            public int compare(Trends t1, Trends t2) {
+                return t1.getTime().getTime() > t2.getTime().getTime() ? -1 : 1;
+            }
+        });
+    }
+
+    public List<Trends> getList() {
+        return list;
+    }
+
     protected Date toDate(String dateString, DateFormat dateFormat) {
         if (dateString == null) {
             return null;
@@ -67,11 +61,5 @@ class AbstractTrendsList {
             return null;
         }
     }
-    
-	public static final DateFormat WEEKLY_TREND_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
-	public static final DateFormat DAILY_TREND_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-	public static final DateFormat LOCAL_TREND_DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'");
 
 }

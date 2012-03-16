@@ -15,66 +15,103 @@
  */
 package org.springframework.social.twitter.api;
 
+import org.springframework.social.ApiException;
+import org.springframework.social.MissingAuthorizationException;
+
 import java.util.List;
 
 /**
  * Interface defining the operations for blocking and unblocking users
+ *
  * @author Craig Walls
  */
 public interface BlockOperations {
 
-	/**
-	 * Blocks a user. If a friendship exists with the user, it will be destroyed.
-	 * @param userId the ID of the user to block.
-	 * @return The {@link TwitterProfile} of the blocked user.
-	 */
-	TwitterProfile block(long userId);
-	
-	/**
-	 * Blocks a user. If a friendship exists with the user, it will be destroyed.
-	 * @param screenName the screen name of the user to block.
-	 * @return The {@link TwitterProfile} of the blocked user.
-	 */
-	TwitterProfile block(String screenName);
+    /**
+     * Blocks a user. If a friendship exists with the user, it will be destroyed.
+     *
+     * @param userId the ID of the user to block.
+     * @return The {@link TwitterProfile} of the blocked user.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    TwitterProfile block(long userId);
 
-	/**
-	 * Unblocks a user.
-	 * @param userId the ID of the user to unblock.
-	 * @return The {@link TwitterProfile} of the unblocked user.
-	 */
-	TwitterProfile unblock(long userId);
-	
-	/**
-	 * Unblocks a user.
-	 * @param screenName the screen name of the user to unblock.
-	 * @return The {@link TwitterProfile} of the unblocked user.
-	 */
-	TwitterProfile unblock(String screenName);
-	
-	/**
-	 * Retrieves a list of users that the authenticating user has blocked.
-	 * @return a list of {@link TwitterProfile}s for the users that are blocked.
-	 */
-	List<TwitterProfile> getBlockedUsers();
-	
-	/**
-	 * Retrieves a list of user IDs for the users that the authenticating user has blocked.
-	 * @return a list of user IDs for the users that are blocked.
-	 */
-	List<Long> getBlockedUserIds();
+    /**
+     * Blocks a user. If a friendship exists with the user, it will be destroyed.
+     *
+     * @param screenName the screen name of the user to block.
+     * @return The {@link TwitterProfile} of the blocked user.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    TwitterProfile block(String screenName);
 
-	/**
-	 * Determines if the user has blocked a specific user.
-	 * @param userId the ID of the user to check for a block.
-	 * @return true if the user is blocked; false otherwise
-	 */
-	boolean isBlocking(long userId);
-	
-	/**
-	 * Determines if the user has blocked a specific user.
-	 * @param screenName the screen name of the user to check for a block.
-	 * @return true if the user is blocked; false otherwise
-	 */
-	boolean isBlocking(String screenName);
+    /**
+     * Unblocks a user.
+     *
+     * @param userId the ID of the user to unblock.
+     * @return The {@link TwitterProfile} of the unblocked user.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    TwitterProfile unblock(long userId);
+
+    /**
+     * Unblocks a user.
+     *
+     * @param screenName the screen name of the user to unblock.
+     * @return The {@link TwitterProfile} of the unblocked user.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    TwitterProfile unblock(String screenName);
+
+    /**
+     * Retrieves a list of users that the authenticating user has blocked.
+     *
+     * @return a list of {@link TwitterProfile}s for the users that are blocked.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    List<TwitterProfile> getBlockedUsers();
+
+    /**
+     * Retrieves a list of users that the authenticating user has blocked.
+     *
+     * @param page     the page of blocked users to return
+     * @param pageSize the number of users per page
+     * @return a list of {@link TwitterProfile}s for the users that are blocked.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    List<TwitterProfile> getBlockedUsers(int page, int pageSize);
+
+    /**
+     * Retrieves a list of user IDs for the users that the authenticating user has blocked.
+     *
+     * @return a list of user IDs for the users that are blocked.
+     * @throws ApiException                  if there is an error while communicating with Twitter.
+     * @throws MissingAuthorizationException if TwitterTemplate was not created with OAuth credentials.
+     */
+    List<Long> getBlockedUserIds();
+
+    /**
+     * Determines if the user has blocked a specific user.
+     *
+     * @param userId the ID of the user to check for a block.
+     * @return true if the user is blocked; false otherwise
+     * @throws ApiException if there is an error while communicating with Twitter.
+     */
+    boolean isBlocking(long userId);
+
+    /**
+     * Determines if the user has blocked a specific user.
+     *
+     * @param screenName the screen name of the user to check for a block.
+     * @return true if the user is blocked; false otherwise
+     * @throws ApiException if there is an error while communicating with Twitter.
+     */
+    boolean isBlocking(String screenName);
 
 }

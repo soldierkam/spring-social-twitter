@@ -15,92 +15,95 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
+import org.springframework.social.ResourceNotFoundException;
 import org.springframework.social.twitter.api.BlockOperations;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of {@link BlockOperations}, providing a binding to Twitter's block REST resources.
+ *
  * @author Craig Walls
  */
 class BlockTemplate extends AbstractTwitterOperations implements BlockOperations {
-	
-	private final RestTemplate restTemplate;
-					
-	public BlockTemplate(RestTemplate restTemplate, boolean isAuthorizedForUser) {
-		super(isAuthorizedForUser);
-		this.restTemplate = restTemplate;
-	}
 
-	public TwitterProfile block(long userId) {
-		requireUserAuthorization();
-		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
-		request.set("user_id", String.valueOf(userId));
-		return restTemplate.postForObject(buildUri("blocks/create.json"), request, TwitterProfile.class);
-	}
-	
-	public TwitterProfile block(String screenName) {
-		requireUserAuthorization();
-		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
-		request.set("screen_name", screenName);
-		return restTemplate.postForObject(buildUri("blocks/create.json"), request, TwitterProfile.class);
-	}
-	
-	public TwitterProfile unblock(long userId) {
-		requireUserAuthorization();
-		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
-		request.set("user_id", String.valueOf(userId));
-		return restTemplate.postForObject(buildUri("blocks/destroy.json"), request, TwitterProfile.class);
-	}
-	
-	public TwitterProfile unblock(String screenName) {
-		requireUserAuthorization();
-		MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
-		request.set("screen_name", screenName);
-		return restTemplate.postForObject(buildUri("blocks/destroy.json"), request, TwitterProfile.class);
-	}
-	
-	public List<TwitterProfile> getBlockedUsers() {
-		requireUserAuthorization();
-		return restTemplate.getForObject(buildUri("blocks/blocking.json"), TwitterProfileList.class);
-	}
-	
-	public List<Long> getBlockedUserIds() {
-		requireUserAuthorization();
-		return restTemplate.getForObject(buildUri("blocks/blocking/ids.json"), LongList.class);
-	}
-	
-	public boolean isBlocking(long userId) {
-		return isBlocking(buildUri("blocks/exists.json", "user_id", String.valueOf(userId)));
-	}
+    private final RestTemplate restTemplate;
 
-	public boolean isBlocking(String screenName) {
-		return isBlocking(buildUri("blocks/exists.json", "screen_name", screenName));
-	}
+    public BlockTemplate(RestTemplate restTemplate, boolean isAuthorizedForUser) {
+        super(isAuthorizedForUser);
+        this.restTemplate = restTemplate;
+    }
 
-	// private helpers
-	
-	private boolean isBlocking(URI blockingExistsUri) {
-		try {
-			restTemplate.getForObject(blockingExistsUri, String.class);
-		} catch (HttpClientErrorException e) {
-			if(e.getStatusCode() == HttpStatus.NOT_FOUND) {
-				return false;
-			}
-			throw e;
-		}
-		return true;
-	}
+    public TwitterProfile block(long userId) {
+        requireAuthorization();
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+        request.set("user_id", String.valueOf(userId));
+        return restTemplate.postForObject(buildUri("blocks/create.json"), request, TwitterProfile.class);
+    }
 
-	@SuppressWarnings("serial")
-	private static class LongList extends ArrayList<Long>{}
+    public TwitterProfile block(String screenName) {
+        requireAuthorization();
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+        request.set("screen_name", screenName);
+        return restTemplate.postForObject(buildUri("blocks/create.json"), request, TwitterProfile.class);
+    }
+
+    public TwitterProfile unblock(long userId) {
+        requireAuthorization();
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+        request.set("user_id", String.valueOf(userId));
+        return restTemplate.postForObject(buildUri("blocks/destroy.json"), request, TwitterProfile.class);
+    }
+
+    public TwitterProfile unblock(String screenName) {
+        requireAuthorization();
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+        request.set("screen_name", screenName);
+        return restTemplate.postForObject(buildUri("blocks/destroy.json"), request, TwitterProfile.class);
+    }
+
+    public List<TwitterProfile> getBlockedUsers() {
+        return getBlockedUsers(1, 20);
+    }
+
+    public List<TwitterProfile> getBlockedUsers(int page, int pageSize) {
+        requireAuthorization();
+        MultiValueMap<String, String> parameters = PagingUtils.buildPagingParametersWithPerPage(page, pageSize, 0, 0);
+        return restTemplate.getForObject(buildUri("blocks/blocking.json", parameters), TwitterProfileList.class);
+    }
+
+    public List<Long> getBlockedUserIds() {
+        requireAuthorization();
+        return restTemplate.getForObject(buildUri("blocks/blocking/ids.json"), LongList.class);
+    }
+
+    public boolean isBlocking(long userId) {
+        return isBlocking(buildUri("blocks/exists.json", "user_id", String.valueOf(userId)));
+    }
+
+    public boolean isBlocking(String screenName) {
+        return isBlocking(buildUri("blocks/exists.json", "screen_name", screenName));
+    }
+
+    // private helpers
+
+    private boolean isBlocking(URI blockingExistsUri) {
+        try {
+            restTemplate.getForObject(blockingExistsUri, String.class);
+            return true;
+        } catch (ResourceNotFoundException e) {
+            return false;
+        }
+    }
+
+    @SuppressWarnings("serial")
+    private static class LongList extends ArrayList<Long> {
+    }
 
 }

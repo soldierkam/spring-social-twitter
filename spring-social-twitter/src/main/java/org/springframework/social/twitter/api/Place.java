@@ -17,62 +17,61 @@ package org.springframework.social.twitter.api;
 
 /**
  * Represents a place that a Twitter user may send a tweet from.
+ *
  * @author Craig Walls
  */
 public class Place {
 
-	// TODO: Adde geometry and bounding box
+    private final String id;
 
-	private final String id;
-	
-	private final String name;
-	
-	private final String fullName;
-	
-	private final String streetAddress;
-	
-	private final String country;
-	
-	private final String countryCode;
-	
-	private final PlaceType placeType;
+    private final String name;
 
-	public Place(String id, String name, String fullName, String streetAddress, String country, String countryCode, PlaceType placeType) {
-		this.id = id;
-		this.name = name;
-		this.fullName = fullName;
-		this.country = country;
-		this.streetAddress = streetAddress;
-		this.countryCode = countryCode;
-		this.placeType = placeType;
-	}
-	
-	public String getId() {
-		return id;
-	}
+    private final String fullName;
 
-	public String getName() {
-		return name;
-	}
+    private final String streetAddress;
 
-	public String getFullName() {
-		return fullName;
-	}
-	
-	public String getStreetAddress() {
-		return streetAddress;
-	}
+    private final String country;
 
-	public String getCountry() {
-		return country;
-	}
+    private final String countryCode;
 
-	public String getCountryCode() {
-		return countryCode;
-	}
+    private final PlaceType placeType;
 
-	public PlaceType getPlaceType() {
-		return placeType;
-	}
+    public Place(String id, String name, String fullName, String streetAddress, String country, String countryCode, PlaceType placeType) {
+        this.id = id;
+        this.name = name;
+        this.fullName = fullName;
+        this.country = country;
+        this.streetAddress = streetAddress;
+        this.countryCode = countryCode;
+        this.placeType = placeType;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public PlaceType getPlaceType() {
+        return placeType;
+    }
 
 }

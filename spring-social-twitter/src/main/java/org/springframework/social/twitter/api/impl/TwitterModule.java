@@ -17,37 +17,29 @@ package org.springframework.social.twitter.api.impl;
 
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.module.SimpleModule;
-import org.springframework.social.twitter.api.DirectMessage;
-import org.springframework.social.twitter.api.Place;
-import org.springframework.social.twitter.api.SavedSearch;
-import org.springframework.social.twitter.api.SearchResults;
-import org.springframework.social.twitter.api.SuggestionCategory;
-import org.springframework.social.twitter.api.Trend;
-import org.springframework.social.twitter.api.Trends;
-import org.springframework.social.twitter.api.Tweet;
-import org.springframework.social.twitter.api.TwitterProfile;
-import org.springframework.social.twitter.api.UserList;
+import org.springframework.social.twitter.api.*;
 
 /**
  * Jackson module for registering mixin annotations against Twitter model classes.
  */
 class TwitterModule extends SimpleModule {
-	public TwitterModule() {
-		super("TwitterModule", new Version(1, 0, 0, null));
-	}
-	
-	@Override
-	public void setupModule(SetupContext context) {
-		context.setMixInAnnotations(TwitterProfile.class, TwitterProfileMixin.class);
-		context.setMixInAnnotations(SavedSearch.class, SavedSearchMixin.class);
-		context.setMixInAnnotations(Trend.class, TrendMixin.class);
-		context.setMixInAnnotations(Trends.class, TrendsMixin.class);
-		context.setMixInAnnotations(SuggestionCategory.class, SuggestionCategoryMixin.class);
-		context.setMixInAnnotations(DirectMessage.class, DirectMessageMixin.class);
-		context.setMixInAnnotations(UserList.class, UserListMixin.class);
-		context.setMixInAnnotations(Tweet.class, TweetMixin.class);
-		context.setMixInAnnotations(SearchResults.class, SearchResultsMixin.class);
-		context.setMixInAnnotations(Place.class, PlaceMixin.class);
-		context.setMixInAnnotations(SimilarPlacesResponse.class, SimilarPlacesMixin.class);
-	}
+    public TwitterModule() {
+        super("TwitterModule", new Version(1, 0, 0, null));
+    }
+
+    @Override
+    public void setupModule(SetupContext context) {
+        context.setMixInAnnotations(TwitterProfile.class, TwitterProfileMixin.class);
+        context.setMixInAnnotations(SavedSearch.class, SavedSearchMixin.class);
+        context.setMixInAnnotations(Trend.class, TrendMixin.class);
+        context.setMixInAnnotations(Trends.class, TrendsMixin.class);
+        context.setMixInAnnotations(SuggestionCategory.class, SuggestionCategoryMixin.class);
+        context.setMixInAnnotations(DirectMessage.class, DirectMessageMixin.class);
+        context.setMixInAnnotations(UserList.class, UserListMixin.class);
+        context.setMixInAnnotations(Tweet.class, TweetMixin.class);
+        context.setMixInAnnotations(SearchResults.class, SearchResultsMixin.class);
+        context.setMixInAnnotations(Place.class, PlaceMixin.class);
+        context.setMixInAnnotations(SimilarPlacesResponse.class, SimilarPlacesMixin.class);
+        context.setMixInAnnotations(RateLimitStatus.class, RateLimitStatusMixin.class);
+    }
 }

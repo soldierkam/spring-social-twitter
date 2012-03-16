@@ -15,15 +15,6 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
@@ -32,40 +23,49 @@ import org.codehaus.jackson.map.JsonDeserializer;
 import org.springframework.social.twitter.api.Trend;
 import org.springframework.social.twitter.api.Trends;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Deserializer to read local trends data into a LocalTrendsHolder object.
+ *
  * @author Craig Walls
  */
 class LocalTrendsDeserializer extends JsonDeserializer<LocalTrendsHolder> {
 
-	@Override
-	public LocalTrendsHolder deserialize(JsonParser jp, DeserializationContext ctxt)
-			throws IOException, JsonProcessingException {
-		JsonNode tree = jp.readValueAsTree();
-		Iterator<JsonNode> dayIt = tree.iterator();
-		if(dayIt.hasNext()) {
-			JsonNode day = dayIt.next();
-			Date createdAt = toDate(day.get("created_at").getValueAsText());
-			JsonNode trendNodes = day.get("trends");
-			List<Trend> trends = new ArrayList<Trend>();
-			for(Iterator<JsonNode> trendsIt = trendNodes.iterator(); trendsIt.hasNext(); ) {
-				JsonNode trendNode = trendsIt.next();
-				trends.add(new Trend(trendNode.get("name").getValueAsText(), trendNode.get("query").getValueAsText()));
-			}
-			jp.skipChildren();
-			return new LocalTrendsHolder(new Trends(createdAt, trends));
-		}
-		
-		throw ctxt.mappingException(LocalTrendsHolder.class);
-	}
-	
-	private static final DateFormat LOCAL_TREND_DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'");
+    @Override
+    public LocalTrendsHolder deserialize(JsonParser jp, DeserializationContext ctxt)
+            throws IOException, JsonProcessingException {
+        JsonNode tree = jp.readValueAsTree();
+        Iterator<JsonNode> dayIt = tree.iterator();
+        if (dayIt.hasNext()) {
+            JsonNode day = dayIt.next();
+            Date createdAt = toDate(day.get("created_at").asText());
+            JsonNode trendNodes = day.get("trends");
+            List<Trend> trends = new ArrayList<Trend>();
+            for (Iterator<JsonNode> trendsIt = trendNodes.iterator(); trendsIt.hasNext(); ) {
+                JsonNode trendNode = trendsIt.next();
+                trends.add(new Trend(trendNode.get("name").asText(), trendNode.get("query").getTextValue()));
+            }
+            jp.skipChildren();
+            return new LocalTrendsHolder(new Trends(createdAt, trends));
+        }
 
-	private static Date toDate(String dateString) {
-		try {
-			return LOCAL_TREND_DATE_FORMAT.parse(dateString);
-		} catch (ParseException e) {
-			return null;
-		}
-	}
+        throw ctxt.mappingException(LocalTrendsHolder.class);
+    }
+
+    private static final String LOCAL_TREND_DATE_FORMAT = "yyyy-mm-dd'T'HH:mm:ss'Z'";
+
+    private static Date toDate(String dateString) {
+        try {
+            return new SimpleDateFormat(LOCAL_TREND_DATE_FORMAT).parse(dateString);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
 }

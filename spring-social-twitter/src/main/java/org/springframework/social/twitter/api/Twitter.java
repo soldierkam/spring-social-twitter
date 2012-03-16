@@ -15,6 +15,9 @@
  */
 package org.springframework.social.twitter.api;
 
+import org.springframework.social.ApiBinding;
+import org.springframework.web.client.RestOperations;
+
 
 /**
  * Interface specifying a basic set of operations for interacting with Twitter.
@@ -22,41 +25,54 @@ package org.springframework.social.twitter.api;
  *
  * @author Craig Walls
  */
-public interface Twitter {
-	
-	/**
-	 * Returns true if the Twitter API binding is configured to act on behalf of a user (eg., if it was created with OAuth credentials).
-	 */
-	boolean isAuthorizedForUser();
-	
-	/**
-	 * Returns the portion of the Twitter API containing the direct message operations.
-	 */
-	DirectMessageOperations directMessageOperations();
+public interface Twitter extends ApiBinding {
 
-	/**
-	 * Returns the portion of the Twitter API containing the friends and followers operations.
-	 */
-	FriendOperations friendOperations();
+    /**
+     * Returns the portion of the Twitter API containing the block operations.
+     */
+    BlockOperations blockOperations();
 
-	/**
-	 * Returns the portion of the Twitter API containing the user list operations.
-	 */
-	ListOperations listOperations();
+    /**
+     * Returns the portion of the Twitter API containing the direct message operations.
+     */
+    DirectMessageOperations directMessageOperations();
 
-	/**
-	 * Returns the portion of the Twitter API containing the search operations.
-	 */
-	SearchOperations searchOperations();
-	
-	/**
-	 * Returns the portion of the Twitter API containing the tweet and timeline operations.
-	 */
-	TimelineOperations timelineOperations();
+    /**
+     * Returns the portion of the Twitter API containing the friends and followers operations.
+     */
+    FriendOperations friendOperations();
 
-	/**
-	 * Returns the portion of the Twitter API containing the user operations.
-	 */
-	UserOperations userOperations();
+    /**
+     * Returns the portion of the Twitter API containing the geo location operations.
+     */
+    GeoOperations geoOperations();
 
+    /**
+     * Returns the portion of the Twitter API containing the user list operations.
+     */
+    ListOperations listOperations();
+
+    /**
+     * Returns the portion of the Twitter API containing the search operations.
+     */
+    SearchOperations searchOperations();
+
+    /**
+     * Returns the portion of the Twitter API containing the tweet and timeline operations.
+     */
+    TimelineOperations timelineOperations();
+
+    /**
+     * Returns the portion of the Twitter API containing the user operations.
+     */
+    UserOperations userOperations();
+
+    /**
+     * Returns the underlying {@link RestOperations} object allowing for consumption of Twitter endpoints that may not be otherwise covered by the API binding.
+     * The RestOperations object returned is configured to include an OAuth "Authorization" header on all requests.
+     */
+    RestOperations restOperations();
+
+
+    StreamingOperations streamingOperations();
 }

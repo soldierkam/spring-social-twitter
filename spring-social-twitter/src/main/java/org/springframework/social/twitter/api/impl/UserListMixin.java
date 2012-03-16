@@ -15,28 +15,43 @@
  */
 package org.springframework.social.twitter.api.impl;
 
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
+import java.io.IOException;
 
 /**
  * Mixin class for adding Jackson annotations to UserList.
+ *
  * @author Craig Walls
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract class UserListMixin {
 
-	@JsonCreator
-	UserListMixin(
-			@JsonProperty("id") long id, 
-			@JsonProperty("name") String name, 
-			@JsonProperty("full_name") String fullName, 
-			@JsonProperty("uri") String uriPath, 
-			@JsonProperty("description") String description, 
-			@JsonProperty("slug") String slug, 
-			@JsonProperty("public") boolean isPublic, 
-			@JsonProperty("following") boolean isFollowing, 
-			@JsonProperty("member_count") int memberCount, 
-			@JsonProperty("subscriber_count") int subscriberCount) {}
+    @JsonCreator
+    UserListMixin(
+            @JsonProperty("id") long id,
+            @JsonProperty("name") String name,
+            @JsonProperty("full_name") String fullName,
+            @JsonProperty("uri") String uriPath,
+            @JsonProperty("description") String description,
+            @JsonProperty("slug") String slug,
+            @JsonProperty("mode") @JsonDeserialize(using = ModeDeserializer.class) boolean isPublic,
+            @JsonProperty("following") boolean isFollowing,
+            @JsonProperty("member_count") int memberCount,
+            @JsonProperty("subscriber_count") int subscriberCount) {
+    }
 
+    private static class ModeDeserializer extends JsonDeserializer<Boolean> {
+        @Override
+        public Boolean deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            return jp.getText().equals("public");
+        }
+    }
 }

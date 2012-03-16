@@ -15,23 +15,20 @@
  */
 package org.springframework.social.twitter.api;
 
-import org.springframework.social.SocialException;
+import org.springframework.social.OperationNotPermittedException;
 
 /**
  * Exception thrown when an attempt is made to send a direct message to an
  * invalid recipient; that is, a recipient who is not following the
  * authenticated user.
- * 
+ *
  * @author Craig Walls
  */
-public class InvalidMessageRecipientException extends SocialException {
-	private static final long serialVersionUID = 1L;
+public class InvalidMessageRecipientException extends OperationNotPermittedException {
+    private static final long serialVersionUID = 1L;
 
-	public InvalidMessageRecipientException(String message) {
-		super(message);
-	}
+    public InvalidMessageRecipientException(String message) {
+        super(message);
+    }
 
-	public InvalidMessageRecipientException(String message, Throwable cause) {
-		super(message, cause);
-	}
 }

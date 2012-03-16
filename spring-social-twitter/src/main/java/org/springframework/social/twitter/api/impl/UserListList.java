@@ -15,27 +15,34 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.UserList;
+
+import java.util.List;
 
 /**
  * Holder for list of UserList, pulled from JSON object's "lists" property.
+ *
  * @author Craig Walls
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class UserListList {
-	private final List<UserList> list;
+    private final CursoredList<UserList> list;
 
-	@JsonCreator
-	public UserListList(@JsonProperty("lists") List<UserList> list) {
-		this.list = list;
-	}
+    @JsonCreator
+    public UserListList(
+            @JsonProperty("lists") List<UserList> list,
+            @JsonProperty("previous_cursor") long previousCursor,
+            @JsonProperty("next_cursor") long nextCursor) {
+        this.list = new CursoredList<UserList>(list, previousCursor, nextCursor);
+    }
 
-	public List<UserList> getList() {
-		return list;
-	}
+    @JsonIgnore
+    public CursoredList<UserList> getList() {
+        return list;
+    }
 }

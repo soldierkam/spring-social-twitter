@@ -15,31 +15,30 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-// TODO: Move this to a support/utils package
 class ArrayUtils {
-	private ArrayUtils() {
-	}
+    private ArrayUtils() {
+    }
 
-	public static String join(long[] items) {
-		if (items.length == 0)
-			return "";
-		StringBuffer sb = new StringBuffer();
-		sb.append(items[0]);
-		for (int i = 1; i < items.length; i++) {
-			sb.append(',').append(items[i]);
-		}
-		return sb.toString();
-	}
+    public static String join(long[] items) {
+        if (items.length == 0)
+            return "";
+        StringBuffer sb = new StringBuffer();
+        sb.append(items[0]);
+        for (int i = 1; i < items.length; i++) {
+            sb.append(',').append(items[i]);
+        }
+        return sb.toString();
+    }
 
-	public static String join(Object[] items) {
-		if (items.length == 0)
-			return "";
-		StringBuffer sb = new StringBuffer();
-		sb.append(items[0]);
-		for (int i = 1; i < items.length; i++) {
-			sb.append(',').append(items[i]);
-		}
-		return sb.toString();
-	}
+    public static String join(Object[] items) {
+        if (items.length == 0)
+            return "";
+        StringBuffer sb = new StringBuffer();
+        sb.append(items[0]);
+        for (int i = 1; i < items.length; i++) {
+            sb.append(',').append(items[i]);
+        }
+        return sb.toString();
+    }
 
 }

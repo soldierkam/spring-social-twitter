@@ -15,27 +15,24 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * Holder for a typed list of Long pulled from an "ids" field in the JSON object. 
- * This helps Jackson know to deserialize values into Long instead of choosing Integer, Long, or BigDecimal
+ * Mixin class for adding Jackson annotations to RateLimitStatus.
+ *
  * @author Craig Walls
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-class LongIdsList {
-	private final List<Long> list;
+@JsonIgnoreProperties(ignoreUnknown = true)
+class RateLimitStatusMixin {
 
-	@JsonCreator
-	public LongIdsList(@JsonProperty("ids") List<Long> list) {
-		this.list = list;
-	}
+    @JsonCreator
+    RateLimitStatusMixin(
+            @JsonProperty("hourly_limit") int hourlyLimit,
+            @JsonProperty("remaining_hits") int remainingHits,
+            @JsonProperty("reset_time_in_seconds") long resetTimeInSeconds
+    ) {
+    }
 
-	public List<Long> getList() {
-		return list;
-	}
 }

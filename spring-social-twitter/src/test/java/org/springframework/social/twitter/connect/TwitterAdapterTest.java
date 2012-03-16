@@ -15,73 +15,84 @@
  */
 package org.springframework.social.twitter.connect;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.UserOperations;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TwitterAdapterTest {
 
-	private TwitterAdapter apiAdapter = new TwitterAdapter();
-	
-	private Twitter twitter = Mockito.mock(Twitter.class);
-	
-	@Test
-	public void fetchProfile() {
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(twitter.userOperations()).thenReturn(userOperations);
-		Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith Donald", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
-		UserProfile profile = apiAdapter.fetchUserProfile(twitter);
-		assertEquals("Keith Donald", profile.getName());
-		assertEquals("Keith", profile.getFirstName());
-		assertEquals("Donald", profile.getLastName());
-		assertNull(profile.getEmail());
-		assertEquals("kdonald", profile.getUsername());
-	}
+    private TwitterAdapter apiAdapter = new TwitterAdapter();
 
-	@Test
-	public void fetchProfileFirstNameOnly() {
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(twitter.userOperations()).thenReturn(userOperations);
-		Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
-		UserProfile profile = apiAdapter.fetchUserProfile(twitter);
-		assertEquals("Keith", profile.getName());
-		assertEquals("Keith", profile.getFirstName());
-		assertNull(profile.getLastName());
-		assertNull(profile.getEmail());
-		assertEquals("kdonald", profile.getUsername());
-	}
+    private Twitter twitter = Mockito.mock(Twitter.class);
 
-	@Test
-	public void fetchProfileMiddleName() {
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(twitter.userOperations()).thenReturn(userOperations);
-		Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith Preston Donald", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
-		UserProfile profile = apiAdapter.fetchUserProfile(twitter);
-		assertEquals("Keith Preston Donald", profile.getName());
-		assertEquals("Keith", profile.getFirstName());
-		assertEquals("Donald", profile.getLastName());
-		assertNull(profile.getEmail());
-		assertEquals("kdonald", profile.getUsername());
-	}
-	
-	@Test
-	public void fetchProfileExtraWhitespace() {
-		UserOperations userOperations = Mockito.mock(UserOperations.class);
-		Mockito.when(twitter.userOperations()).thenReturn(userOperations);
-		Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith 	Preston  Donald", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
-		UserProfile profile = apiAdapter.fetchUserProfile(twitter);
-		assertEquals("Keith 	Preston  Donald", profile.getName());
-		assertEquals("Keith", profile.getFirstName());
-		assertEquals("Donald", profile.getLastName());
-		assertNull(profile.getEmail());
-		assertEquals("kdonald", profile.getUsername());
-	}
-	
+    @Test
+    public void fetchProfile() {
+        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        Mockito.when(twitter.userOperations()).thenReturn(userOperations);
+        Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith Donald", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
+        UserProfile profile = apiAdapter.fetchUserProfile(twitter);
+        assertEquals("Keith Donald", profile.getName());
+        assertEquals("Keith", profile.getFirstName());
+        assertEquals("Donald", profile.getLastName());
+        assertNull(profile.getEmail());
+        assertEquals("kdonald", profile.getUsername());
+    }
+
+    @Test
+    public void fetchProfileFirstNameOnly() {
+        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        Mockito.when(twitter.userOperations()).thenReturn(userOperations);
+        Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
+        UserProfile profile = apiAdapter.fetchUserProfile(twitter);
+        assertEquals("Keith", profile.getName());
+        assertEquals("Keith", profile.getFirstName());
+        assertNull(profile.getLastName());
+        assertNull(profile.getEmail());
+        assertEquals("kdonald", profile.getUsername());
+    }
+
+    @Test
+    public void fetchProfileMiddleName() {
+        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        Mockito.when(twitter.userOperations()).thenReturn(userOperations);
+        Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith Preston Donald", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
+        UserProfile profile = apiAdapter.fetchUserProfile(twitter);
+        assertEquals("Keith Preston Donald", profile.getName());
+        assertEquals("Keith", profile.getFirstName());
+        assertEquals("Donald", profile.getLastName());
+        assertNull(profile.getEmail());
+        assertEquals("kdonald", profile.getUsername());
+    }
+
+    @Test
+    public void fetchProfileExtraWhitespace() {
+        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        Mockito.when(twitter.userOperations()).thenReturn(userOperations);
+        Mockito.when(userOperations.getUserProfile()).thenReturn(new TwitterProfile(123L, "kdonald", "Keith 	Preston  Donald", "http://twitter.com/kdonald", "http://twitter.com/kdonald/picture", "me", "melbourne, fl", new Date()));
+        UserProfile profile = apiAdapter.fetchUserProfile(twitter);
+        assertEquals("Keith 	Preston  Donald", profile.getName());
+        assertEquals("Keith", profile.getFirstName());
+        assertEquals("Donald", profile.getLastName());
+        assertNull(profile.getEmail());
+        assertEquals("kdonald", profile.getUsername());
+    }
+
+    @Test
+    @Ignore
+    public void fetchProfile_IOError() {
+        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        Mockito.when(twitter.userOperations()).thenReturn(userOperations);
+        Mockito.when(userOperations.getUserProfile()).thenThrow(new ResourceAccessException("Resource access exception"));
+        apiAdapter.fetchUserProfile(twitter);
+    }
 }

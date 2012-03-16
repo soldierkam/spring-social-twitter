@@ -15,23 +15,23 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
-import org.springframework.social.twitter.api.impl.TwitterTemplate;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TwitterTemplateTest {
-	
-	@Test
-	public void isAuthorizedForUser() {
-		TwitterTemplate twitter = new TwitterTemplate("API_KEY", "API_SECRET", "ACCESS_TOKEN", "ACCESS_TOKEN_SECRET");
-		assertTrue(twitter.isAuthorizedForUser());
-	}
 
-	@Test
-	public void isAuthorizedForUser_notAuthorized() {
-		TwitterTemplate twitter = new TwitterTemplate();
-		assertFalse(twitter.isAuthorizedForUser());
-	}
+    @Test
+    public void isAuthorizedForUser() {
+        TwitterTemplate twitter = new TwitterTemplate("API_KEY", "API_SECRET", "ACCESS_TOKEN", "ACCESS_TOKEN_SECRET");
+        assertTrue(twitter.isAuthorized());
+    }
+
+    @Test
+    public void isAuthorizedForUser_notAuthorized() {
+        TwitterTemplate twitter = new TwitterTemplate();
+        assertFalse(twitter.isAuthorized());
+    }
 
 }

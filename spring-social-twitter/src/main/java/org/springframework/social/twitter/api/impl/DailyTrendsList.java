@@ -15,24 +15,26 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.social.twitter.api.Trend;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Holder of a list of daily trends.
+ *
  * @author Craig Walls
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 class DailyTrendsList extends AbstractTrendsList {
 
-	@JsonCreator
-	public DailyTrendsList(@JsonProperty("trends") Map<String, List<Trend>> trends) {
-		super(trends, DAILY_TREND_DATE_FORMAT);
-	}
+    @JsonCreator
+    public DailyTrendsList(@JsonProperty("trends") Map<String, List<Trend>> trends) {
+        super(trends, new SimpleDateFormat("yyyy-MM-dd HH:mm"));
+    }
 
 }

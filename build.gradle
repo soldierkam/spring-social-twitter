@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- import org.springframework.build.Version
+
+import org.springframework.build.Version
 
 // -----------------------------------------------------------------------------
 // Main gradle build file for Spring Social Twitter
@@ -59,7 +60,6 @@ allprojects {
     }
 }
 
-
 // -----------------------------------------------------------------------------
 // Create collections of subprojects - each will receive their own configuration
 // - all subprojects that start with spring-social-* are 'java projects'
@@ -93,12 +93,13 @@ configure(javaprojects) {
     // add tasks for finding and publishing .xsd files
     apply from: "$buildSrcDir/schema-publication.gradle"
 
-    springSocialVersion = '1.0.0.BUILD-SNAPSHOT'
-    commonsCodecVersion = '1.5'
-    jacksonVersion = '1.8.0'
-    junitVersion = '4.8.2'
-    mockitoVersion = '1.8.5'
-    springVersion = '3.1.0.M1'
+    springSocialVersion = '1.0.2.RELEASE'
+    jacksonVersion = '1.9.3'
+    junitVersion = '4.10'
+    mockitoVersion = '1.9.0'
+    springVersion = '3.1.0.RELEASE'
+    springSecurityCryptoVersion = '3.1.0.RELEASE'
+    springTestMvcVersion = "1.0.0.BUILD-SNAPSHOT"
 
     sourceSets {
         main {
@@ -115,7 +116,7 @@ configure(javaprojects) {
 
     // dependencies that are common across all java projects
     dependencies {
-        testCompile "junit:junit:$junitVersion"
+        testCompile "junit:junit-dep:$junitVersion"
         testCompile "org.mockito:mockito-all:$mockitoVersion"
         testCompile "org.springframework:spring-test:$springVersion"
     }
@@ -127,7 +128,6 @@ configure(javaprojects) {
     eclipseClasspath.variables = [:]
 }
 
-
 // -----------------------------------------------------------------------------
 // Configuration for each individual core java subproject
 //
@@ -137,10 +137,10 @@ configure(javaprojects) {
 project('spring-social-twitter') {
     description = 'Twitter API'
     dependencies {
-	   compile "org.springframework.social:spring-social-core:$springSocialVersion"
-       compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
-	   testCompile "org.springframework.social:spring-social-test:$springSocialVersion"
-       testCompile ("commons-codec:commons-codec:$commonsCodecVersion")
+        compile "org.springframework.social:spring-social-core:$springSocialVersion"
+        compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
+        compile "org.springframework.security:spring-security-crypto:$springSecurityCryptoVersion"
+        testCompile "org.springframework:spring-test-mvc:$springTestMvcVersion"
     }
 }
 

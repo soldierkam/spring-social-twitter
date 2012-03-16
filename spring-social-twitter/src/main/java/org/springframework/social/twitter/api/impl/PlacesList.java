@@ -15,9 +15,6 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
@@ -31,29 +28,34 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.social.twitter.api.Place;
 
+import java.io.IOException;
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 class PlacesList {
-	
-	private final List<Place> list;
 
-	@JsonCreator
-	public PlacesList(@JsonProperty("result") @JsonDeserialize(using=PlacesDeserializer.class) List<Place> list) {
-		this.list = list;
-	}
+    private final List<Place> list;
 
-	public List<Place> getList() {
-		return list;
-	}
+    @JsonCreator
+    public PlacesList(@JsonProperty("result") @JsonDeserialize(using = PlacesDeserializer.class) List<Place> list) {
+        this.list = list;
+    }
 
-	private static class PlacesDeserializer extends JsonDeserializer<List<Place>> {
-		@Override
-		public List<Place> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.setDeserializationConfig(ctxt.getConfig());
-			jp.setCodec(mapper);
-		    
-			JsonNode dataNode = jp.readValueAsTree().get("places");
-			return (List<Place>) mapper.readValue(dataNode, new TypeReference<List<Place>>() {});
-		}
-	}
+    public List<Place> getList() {
+        return list;
+    }
+
+    private static class PlacesDeserializer extends JsonDeserializer<List<Place>> {
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<Place> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setDeserializationConfig(ctxt.getConfig());
+            jp.setCodec(mapper);
+
+            JsonNode dataNode = jp.readValueAsTree().get("places");
+            return (List<Place>) mapper.readValue(dataNode, new TypeReference<List<Place>>() {
+            });
+        }
+    }
 }

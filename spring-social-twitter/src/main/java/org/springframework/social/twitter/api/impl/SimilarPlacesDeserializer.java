@@ -15,9 +15,6 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
@@ -27,18 +24,23 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.social.twitter.api.Place;
 
+import java.io.IOException;
+import java.util.List;
+
 class SimilarPlacesDeserializer extends JsonDeserializer<SimilarPlacesResponse> {
-	@Override
-	public SimilarPlacesResponse deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDeserializationConfig(ctxt.getConfig());
-		jp.setCodec(mapper);
-	    
-		JsonNode tree = jp.readValueAsTree();
-		JsonNode resultNode = tree.get("result");
-		String token = resultNode.get("token").getTextValue();
-		JsonNode placesNode = resultNode.get("places");
-		List<Place> places = (List<Place>) mapper.readValue(placesNode, new TypeReference<List<Place>>() {});
-		return new SimilarPlacesResponse(places, token);
-	}
+    @Override
+    public SimilarPlacesResponse deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setDeserializationConfig(ctxt.getConfig());
+        jp.setCodec(mapper);
+
+        JsonNode tree = jp.readValueAsTree();
+        JsonNode resultNode = tree.get("result");
+        String token = resultNode.get("token").getTextValue();
+        JsonNode placesNode = resultNode.get("places");
+        @SuppressWarnings("unchecked")
+        List<Place> places = (List<Place>) mapper.readValue(placesNode, new TypeReference<List<Place>>() {
+        });
+        return new SimilarPlacesResponse(places, token);
+    }
 }

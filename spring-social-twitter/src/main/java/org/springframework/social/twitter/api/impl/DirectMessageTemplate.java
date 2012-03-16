@@ -15,56 +15,80 @@
  */
 package org.springframework.social.twitter.api.impl;
 
-import java.util.List;
-
 import org.springframework.social.twitter.api.DirectMessage;
 import org.springframework.social.twitter.api.DirectMessageOperations;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
  * Implementation of {@link DirectMessageOperations}, providing a binding to Twitter's direct message-oriented REST resources.
+ *
  * @author Craig Walls
  */
 class DirectMessageTemplate extends AbstractTwitterOperations implements DirectMessageOperations {
-	
-	private final RestTemplate restTemplate;
 
-	public DirectMessageTemplate(RestTemplate restTemplate, boolean isAuthorizedForUser) {
-		super(isAuthorizedForUser);
-		this.restTemplate = restTemplate;
-	}
+    private final RestTemplate restTemplate;
 
-	public List<DirectMessage> getDirectMessagesReceived() {
-		requireUserAuthorization();
-		return restTemplate.getForObject(buildUri("direct_messages.json"), DirectMessageList.class);
-	}
+    public DirectMessageTemplate(RestTemplate restTemplate, boolean isAuthorizedForUser) {
+        super(isAuthorizedForUser);
+        this.restTemplate = restTemplate;
+    }
 
-	public List<DirectMessage> getDirectMessagesSent() {
-		requireUserAuthorization();
-		return restTemplate.getForObject(buildUri("direct_messages/sent.json"), DirectMessageList.class);
-	}
+    public List<DirectMessage> getDirectMessagesReceived() {
+        return getDirectMessagesReceived(1, 20, 0, 0);
+    }
 
-	public void sendDirectMessage(String toScreenName, String text) {
-		requireUserAuthorization();
-		MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
-		data.add("screen_name", String.valueOf(toScreenName));
-		data.add("text", text);
-		restTemplate.postForObject(buildUri("direct_messages/new.json"), data, String.class);
-	}
+    public List<DirectMessage> getDirectMessagesReceived(int page, int pageSize) {
+        return getDirectMessagesReceived(page, pageSize, 0, 0);
+    }
 
-	public void sendDirectMessage(long toUserId, String text) {
-		requireUserAuthorization();
-		MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
-		data.add("user_id", String.valueOf(toUserId));
-		data.add("text", text);
-		restTemplate.postForObject(buildUri("direct_messages/new.json"), data, String.class);
-	}
+    public List<DirectMessage> getDirectMessagesReceived(int page, int pageSize, long sinceId, long maxId) {
+        requireAuthorization();
+        MultiValueMap<String, String> parameters = PagingUtils.buildPagingParametersWithCount(page, pageSize, sinceId, maxId);
+        return restTemplate.getForObject(buildUri("direct_messages.json", parameters), DirectMessageList.class);
+    }
 
-	public void deleteDirectMessage(long messageId) {
-		requireUserAuthorization();
-		restTemplate.delete(buildUri("direct_messages/destroy/" + messageId + ".json"));
-	}
+    public List<DirectMessage> getDirectMessagesSent() {
+        return getDirectMessagesSent(1, 20, 0, 0);
+    }
+
+    public List<DirectMessage> getDirectMessagesSent(int page, int pageSize) {
+        return getDirectMessagesSent(page, pageSize, 0, 0);
+    }
+
+    public List<DirectMessage> getDirectMessagesSent(int page, int pageSize, long sinceId, long maxId) {
+        requireAuthorization();
+        MultiValueMap<String, String> parameters = PagingUtils.buildPagingParametersWithCount(page, pageSize, sinceId, maxId);
+        return restTemplate.getForObject(buildUri("direct_messages/sent.json", parameters), DirectMessageList.class);
+    }
+
+    public DirectMessage getDirectMessage(long id) {
+        requireAuthorization();
+        return restTemplate.getForObject(buildUri("direct_messages/show/" + id + ".json"), DirectMessage.class);
+    }
+
+    public DirectMessage sendDirectMessage(String toScreenName, String text) {
+        requireAuthorization();
+        MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
+        data.add("screen_name", String.valueOf(toScreenName));
+        data.add("text", text);
+        return restTemplate.postForObject(buildUri("direct_messages/new.json"), data, DirectMessage.class);
+    }
+
+    public DirectMessage sendDirectMessage(long toUserId, String text) {
+        requireAuthorization();
+        MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
+        data.add("user_id", String.valueOf(toUserId));
+        data.add("text", text);
+        return restTemplate.postForObject(buildUri("direct_messages/new.json"), data, DirectMessage.class);
+    }
+
+    public void deleteDirectMessage(long messageId) {
+        requireAuthorization();
+        restTemplate.delete(buildUri("direct_messages/destroy/" + messageId + ".json"));
+    }
 
 }

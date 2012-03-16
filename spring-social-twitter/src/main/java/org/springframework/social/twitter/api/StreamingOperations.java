@@ -19,20 +19,29 @@ import java.util.List;
 
 /**
  * Defines operations for working with Twitter's streaming API
+ *
  * @author Craig Walls
  */
 public interface StreamingOperations {
-	
-	/**
-	 * Monitor a filtered stream, given a set of listeners
-	 * @param trackKeywords the terms to track in the stream
-	 * @param listeners the listeners to monitor the stream
-	 */
-	void filter(String trackKeywords, List<StreamListener> listeners);
-	
-	/**
-	 * Shutdown the open stream
-	 */
-	void stopStreaming();
-	
+
+    /**
+     * Monitor a filtered stream, given a set of listeners
+     *
+     * @param trackKeywords the terms to track in the stream
+     * @param listeners     the listeners to monitor the stream
+     */
+    void filter(String trackKeywords, List<StreamListener> listeners);
+
+    /**
+     * Monitor a sample stream, given a set of listeners
+     *
+     * @param listeners the listeners to monitor the stream
+     */
+    void sample(List<StreamListener> listeners);
+
+    /**
+     * Shutdown the open stream
+     */
+    void stopStreaming();
+
 }

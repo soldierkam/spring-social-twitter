@@ -15,24 +15,18 @@
  */
 package org.springframework.social.twitter.api;
 
-import org.springframework.social.SocialException;
+import org.springframework.social.OperationNotPermittedException;
 
 /**
- * An exception that is thrown when a follow or and unfollow fails usually because the authenticated user is already
- * following the specified user or tried to unfollow the user not already following.
- * 
- * @author Gary Jarrel
+ * Exception indicating that an attempt was made to post a status or send a direct message where the length exceeds Twitter's 140 character limit.
+ *
+ * @author Craig Walls
  */
-public class FriendshipFailureException extends SocialException {
+@SuppressWarnings("serial")
+public class MessageTooLongException extends OperationNotPermittedException {
 
-    private static final long serialVersionUID = 1L;
-    
-    public FriendshipFailureException(String message) {
+    public MessageTooLongException(String message) {
         super(message);
-    }
-
-    public FriendshipFailureException(String message, Throwable cause) {
-        super(message, cause);
     }
 
 }
